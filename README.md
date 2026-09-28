@@ -4,6 +4,16 @@ Futuristic landing page and prototype for an AI copilot that turns invoice photo
 
 **Live site:** https://nikhil-creat.github.io/ledgermind/
 
+## Designed and Developed by 
+# **NIKHIL CHARY SRIRAMOJU**
+BTech CSE (Final Year)
+
+- GitHub: [Nikhil-creat](https://github.com/Nikhil-creat)
+- LinkedIn: [nikhil-chary-sriramoju](https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a)
+- Email: sriramojunikhil66@gmail.com
+- Instagram: [@nikhil__sriramoju](https://www.instagram.com/nikhil__sriramoju)
+- Facebook: [Profile](https://www.facebook.com/profile.php?id=100079201124141)
+
 ## Features
 - Multi-agent invoice pipeline demo
 - AI chatbot (Groq, Llama 3.3) with voice input
