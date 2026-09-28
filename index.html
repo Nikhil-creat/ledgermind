@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LedgerMind — Agentic AI GST Copilot</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#070b16;--card:#0f1628;--bd:#22304f;--tx:#e8eeff;--mu:#93a1c4;--a:#5eead4;--b:#818cf8;--c:#f472b6}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f7ff;--card:#fff;--bd:#d5def5;--tx:#0d1530;--mu:#55648a;--a:#0d9488;--b:#4f46e5;--c:#db2777}}
+:root[data-theme="dark"]{--bg:#070b16;--card:#0f1628;--bd:#22304f;--tx:#e8eeff;--mu:#93a1c4;--a:#5eead4;--b:#818cf8;--c:#f472b6}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(600px 400px at 15% 5%,color-mix(in srgb,var(--b) 30%,transparent),transparent),radial-gradient(500px 400px at 90% 20%,color-mix(in srgb,var(--a) 22%,transparent),transparent),linear-gradient(var(--bd) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--bd) 1px,transparent 1px) 0 0/48px 48px;opacity:.55}
+a{color:inherit;text-decoration:none}
+.w{max-width:1080px;margin:auto;padding:0 20px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 70%,transparent);border-bottom:1px solid var(--bd)}
+nav .w{display:flex;justify-content:space-between;align-items:center;height:60px}
+.logo{font-weight:800;letter-spacing:-.02em}.logo i{font-style:normal;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+nav .l{display:flex;gap:18px;font-size:14px;color:var(--mu)}
+@media(max-width:640px){nav .l a:not(.btn){display:none}}
+.btn{display:inline-block;padding:10px 18px;border-radius:10px;font-weight:600;font-size:14px;background:linear-gradient(90deg,var(--a),var(--b));color:#06101f;border:0;cursor:pointer}
+.btn.o{background:transparent;color:var(--tx);border:1px solid var(--bd)}
+.hero{padding:72px 0 40px;text-align:center}
+.tag{display:inline-block;font-size:12px;padding:5px 12px;border:1px solid var(--bd);border-radius:99px;color:var(--a);background:var(--card)}
+h1{font-size:clamp(34px,7vw,64px);line-height:1.05;letter-spacing:-.03em;margin:18px 0}
+h1 span{background:linear-gradient(90deg,var(--a),var(--b),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mu);max-width:620px;margin:0 auto 26px;font-size:18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:40px 0}
+.stat,.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:18px}
+.stat b{font-size:28px;display:block;color:var(--a)}.stat small{color:var(--mu)}
+section{padding:48px 0}
+h2{font-size:clamp(26px,4vw,38px);letter-spacing:-.02em;margin:0 0 8px}
+.sub{color:var(--mu);margin:0 0 26px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card h3{margin:8px 0 6px;font-size:17px}.card p{margin:0;color:var(--mu);font-size:14px}
+.ic{font-size:22px}
+.demo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.demo{grid-template-columns:1fr}}
+.inv{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;white-space:pre-wrap;color:var(--mu);min-height:210px}
+.steps{list-style:none;margin:0;padding:0}
+.steps li{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px dashed var(--bd);color:var(--mu);font-size:14px;transition:.3s}
+.steps li:before{content:"○";color:var(--bd)}
+.steps li.on{color:var(--tx)}.steps li.on:before{content:"●";color:var(--a);text-shadow:0 0 10px var(--a)}
+.out{margin-top:12px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--a);min-height:70px;white-space:pre-wrap}
+.chat{display:flex;flex-direction:column;gap:8px;font-size:14px}
+.m{padding:10px 14px;border-radius:14px;max-width:88%}.u{background:var(--b);color:#fff;align-self:flex-end}.ai{background:var(--card);border:1px solid var(--bd)}
+.price{position:relative}.price h3{font-size:15px;color:var(--mu);margin:0}.price .p{font-size:34px;font-weight:800;margin:6px 0}
+.price ul{padding-left:18px;color:var(--mu);font-size:14px}.hot{border-color:var(--a);box-shadow:0 0 40px -12px var(--a)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chips span{padding:6px 12px;border:1px solid var(--bd);border-radius:99px;background:var(--card);font-size:13px;color:var(--mu)}
+.arch{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.arch div{padding:12px 16px;border-radius:12px;border:1px solid var(--bd);background:var(--card);font-size:13px;text-align:center}
+.arch b{color:var(--a)}
+#fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:20;width:58px;height:58px;border-radius:50%;border:0;font-size:26px;cursor:pointer;background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 0 30px var(--a)}
+#bot{position:fixed;right:14px;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:20;width:min(380px,calc(100vw - 28px));height:min(520px,70vh);display:none;flex-direction:column;background:var(--card);border:1px solid var(--bd);border-radius:18px;overflow:hidden;box-shadow:0 20px 60px #0008}
+#bot.open{display:flex}
+#bot header{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px}
+#log{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;font-size:14px}
+#bot form{display:flex;gap:6px;padding:10px;border-top:1px solid var(--bd)}
+input,select{background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:10px;font:inherit;min-width:0}
+#bot form input{flex:1}
+.ib{border:1px solid var(--bd);background:transparent;color:var(--tx);border-radius:10px;padding:0 12px;cursor:pointer}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.row>*{flex:1;min-width:110px}
+.res{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--a);white-space:pre-wrap}
+footer{border-top:1px solid var(--bd);padding:26px 0;color:var(--mu);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<nav><div class="w"><a class="logo" href="#top">Ledger<i>Mind</i></a><div class="l"><a href="#demo">Live demo</a><a href="#agents">Agents</a><a href="#pricing">Pricing</a><a href="#founder">Founder</a><a class="btn" href="#pricing">Start free</a></div></div></nav>
+
+<header class="hero w" id="top">
+<span class="tag">● Agentic AI · GST-ready in seconds</span>
+<h1>Your books, run by <span>autonomous AI agents</span></h1>
+<p>Snap or WhatsApp a bill. LedgerMind reads it, validates GSTIN, finds missed input tax credit and files-ready exports — while you run your business.</p>
+<a class="btn" href="#demo">Watch the agents work</a> <a class="btn o" href="#pricing">See pricing</a>
+<div class="stats">
+<div class="stat"><b>&lt;8s</b><small>invoice to ledger</small></div>
+<div class="stat"><b>98%</b><small>target extraction accuracy</small></div>
+<div class="stat"><b>6</b><small>cooperating AI agents</small></div>
+<div class="stat"><b>₹299</b><small>per month for shops</small></div>
+</div>
+</header>
+
+<section class="w" id="demo">
+<h2>Live agent pipeline</h2><p class="sub">Simulated demo of the multi-agent workflow. Press run.</p>
+<div class="demo">
+<div class="card"><div class="inv" id="inv">📷 invoice_0428.jpg
+Sri Lakshmi Traders
+GSTIN 36AABCS1234F1Z5
+Rice 50kg  ₹2,400
+Oil 20L    ₹3,100
+GST 5% / 12%  ₹ 492
+Total ₹5,992</div><br><button class="btn" id="run">▶ Run agents</button></div>
+<div class="card"><ul class="steps" id="steps">
+<li>Ingest agent — WhatsApp / upload</li><li>Vision agent — OCR + layout</li><li>Extraction agent — LLM to JSON</li><li>Compliance agent — GSTIN + rules RAG</li><li>Reconcile agent — duplicates, mismatch</li><li>Ledger agent — ITC + GSTR export</li></ul>
+<div class="out" id="out"></div></div>
+</div></section>
+
+<section class="w"><h2>Ask your books anything</h2><p class="sub">Conversational CFO agent grounded in your ledger and GST rules.</p>
+<div class="card chat"><div class="m u">How much input tax credit did I miss this quarter?</div>
+<div class="m ai">You have ₹18,420 of unclaimed ITC across 14 invoices. 3 vendors have not filed GSTR-1, so 2 invoices (₹4,110) are at risk. Want me to draft reminder messages?</div>
+<div class="m u">Yes, and export GSTR-3B summary.</div>
+<div class="m ai">Done — reminders queued on WhatsApp and GSTR-3B JSON is ready to download.</div></div></section>
+
+<section class="w"><h2>Futuristic feature set</h2><p class="sub">Built to feel like an autopilot, not a spreadsheet.</p>
+<div class="g">
+<div class="card"><div class="ic">🧠</div><h3>Agentic orchestration</h3><p>A planner agent delegates to specialist agents with tool use and self-correction loops.</p></div>
+<div class="card"><div class="ic">👁️</div><h3>Vision extraction</h3><p>Reads crumpled, multilingual and handwritten bills from a phone photo.</p></div>
+<div class="card"><div class="ic">📚</div><h3>GST rules RAG</h3><p>pgvector search over notifications and HSN/SAC codes for cited answers.</p></div>
+<div class="card"><div class="ic">🛡️</div><h3>Fraud &amp; anomaly radar</h3><p>Flags fake GSTINs, duplicate bills and unusual price jumps.</p></div>
+<div class="card"><div class="ic">💬</div><h3>WhatsApp-native</h3><p>Send a bill, get a confirmation. No app to learn.</p></div>
+<div class="card"><div class="ic">📊</div><h3>Predictive tax planner</h3><p>Forecasts next month's GST liability and cash impact.</p></div>
+<div class="card"><div class="ic">🎙️</div><h3>Voice commands</h3><p>Speak in Telugu, Hindi or English to add expenses.</p></div>
+<div class="card"><div class="ic">🔐</div><h3>Row-level security</h3><p>Multi-tenant Supabase RLS, audit trail and encrypted storage.</p></div>
+</div></section>
+
+<section class="w" id="agents"><h2>System architecture</h2><p class="sub">Event-driven, serverless friendly and horizontally scalable.</p>
+<div class="arch"><div>WhatsApp / Web<br><b>Next.js PWA</b></div>→<div>API gateway<br><b>FastAPI</b></div>→<div>Planner agent<br><b>LangGraph</b></div>→<div>Vision + LLM<br><b>Extraction</b></div>→<div>RAG<br><b>pgvector</b></div>→<div>Data<br><b>Supabase</b></div>→<div>Billing<br><b>Razorpay</b></div></div></section>
+
+<section class="w" id="pricing"><h2>Pricing that pays for itself</h2><p class="sub">Start free, upgrade when time saved beats the price.</p>
+<div class="g">
+<div class="card price"><h3>Starter</h3><div class="p">₹0</div><ul><li>20 invoices / month</li><li>Basic dashboard</li><li>Excel export</li></ul><a class="btn o" href="#top">Get started</a></div>
+<div class="card price hot"><h3>Shop Pro</h3><div class="p">₹299<small>/mo</small></div><ul><li>Unlimited invoices</li><li>WhatsApp agent</li><li>ITC finder + GSTR JSON</li></ul><a class="btn" href="#top">Go Pro</a></div>
+<div class="card price"><h3>CA Suite</h3><div class="p">₹1,999<small>/mo</small></div><ul><li>Multi-client dashboard</li><li>Team roles + audit log</li><li>White-label reports</li></ul><a class="btn o" href="#top">Book demo</a></div>
+</div></section>
+
+<section class="w"><h2>Advanced modules</h2><p class="sub">Next-gen capabilities on the roadmap and in the prototype.</p>
+<div class="g">
+<div class="card"><div class="ic">⚡</div><h3>Groq LPU inference</h3><p>Ultra-low-latency Llama 3.3 replies for the chatbot and extraction.</p></div>
+<div class="card"><div class="ic">🕸️</div><h3>Multi-agent swarm</h3><p>Planner, critic and executor agents verify each other before booking entries.</p></div>
+<div class="card"><div class="ic">🔗</div><h3>E-invoice &amp; e-way bill</h3><p>IRN/QR generation hooks and GSP integration for compliant billing.</p></div>
+<div class="card"><div class="ic">🧾</div><h3>Bank reconciliation</h3><p>Match UPI and bank statements to invoices automatically.</p></div>
+<div class="card"><div class="ic">📈</div><h3>Cash-flow digital twin</h3><p>Simulate what-if scenarios for tax, stock and credit.</p></div>
+<div class="card"><div class="ic">🔒</div><h3>Zero-trust security</h3><p>Encrypted vaults, RLS, signed audit trail and PII masking.</p></div>
+</div></section>
+
+<section class="w"><h2>Try the tools</h2><p class="sub">Working GST calculator and a predicted liability chart.</p>
+<div class="demo"><div class="card"><h3 style="margin-top:0">GST calculator</h3>
+<div class="row"><input id="amt" type="number" inputmode="decimal" placeholder="Amount ₹" value="10000"><select id="rate"><option>5</option><option>12</option><option selected>18</option><option>28</option></select><select id="mode"><option value="ex">Excl. GST</option><option value="in">Incl. GST</option></select></div>
+<button class="btn" id="calc">Calculate</button><div class="res" id="cres" style="margin-top:12px"></div></div>
+<div class="card"><h3 style="margin-top:0">Forecast: next 6 months GST liability (₹k)</h3>
+<svg viewBox="0 0 300 140" width="100%" role="img" aria-label="Forecast chart"><defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="var(--a)"/><stop offset="1" stop-color="var(--c)"/></linearGradient></defs>
+<g fill="url(#lg)"><rect x="15" y="80" width="30" height="50" rx="5"/><rect x="65" y="65" width="30" height="65" rx="5"/><rect x="115" y="72" width="30" height="58" rx="5"/><rect x="165" y="45" width="30" height="85" rx="5"/><rect x="215" y="55" width="30" height="75" rx="5"/><rect x="262" y="30" width="30" height="100" rx="5" opacity=".6"/></g>
+<g fill="var(--mu)" font-size="10" text-anchor="middle"><text x="30" y="140">Oct</text><text x="80" y="140">Nov</text><text x="130" y="140">Dec</text><text x="180" y="140">Jan</text><text x="230" y="140">Feb</text><text x="277" y="140">Mar</text></g></svg></div></div></section>
+
+<section class="w"><h2>Tech stack</h2><br>
+<div class="chips"><span>Next.js</span><span>React</span><span>TypeScript</span><span>FastAPI</span><span>Python</span><span>LangGraph</span><span>RAG</span><span>pgvector</span><span>Supabase</span><span>Docker</span><span>Razorpay</span><span>WhatsApp API</span><span>CNN / OCR</span><span>GitHub Actions</span></div></section>
+
+<section class="w" id="founder"><h2>Built by</h2><p class="sub">Engineer and AI builder.</p>
+<div class="card"><h3 style="margin-top:0;font-size:22px">Nikhil Chary Sriramoju</h3>
+<p>B.Tech in Computer Science &amp; Engineering, Vaagdevi College of Engineering (2023–2027), Telangana, India.</p><br>
+<div class="chips"><span>ML Engineer Intern · Yuva Intern (NSDC)</span><span>Data Analytics Intern · Thiranex</span><span>NASSCOM / Skill India — AI-Data Engineering &amp; Cloud</span><span>IBM SkillsBuild — AI Fundamentals</span><span>Reliance Foundation — AI/ML Engineer</span></div><br>
+<a class="btn" href="https://github.com/Nikhil-creat">GitHub</a> <a class="btn o" href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a">LinkedIn</a> <a class="btn o" href="mailto:sriramojunikhil66@gmail.com">Email</a></div></section>
+
+<footer>© 2026 LedgerMind · Designed &amp; built by Nikhil Chary Sriramoju</footer>
+
+<button id="fab" aria-label="Open AI assistant">🤖</button>
+<div id="bot"><header><span>LedgerMind AI · Groq</span><span><button class="ib" id="key" title="Set Groq API key" style="padding:4px 10px">🔑</button> <button class="ib" id="x" style="padding:4px 10px">✕</button></span></header>
+<div id="log"><div class="m ai">Hi! I'm the LedgerMind assistant. Ask about GST, ITC, invoices or pricing. Tap 🔑 to add your free Groq key for live AI answers.</div></div>
+<form id="f"><input id="q" placeholder="Ask anything…" autocomplete="off"><button type="button" class="ib" id="mic">🎙️</button><button class="btn">Send</button></form></div>
+<script>
+const $=id=>document.getElementById(id);
+const gk=()=>{try{return localStorage.getItem('lm_groq')||''}catch(e){return ''}};
+const SYS='You are LedgerMind AI, a concise assistant for Indian small businesses and CAs. Explain GST, input tax credit, GSTR-1/3B, e-invoicing and bookkeeping simply. Give short answers. Say you are not a tax professional for filing decisions.';
+let hist=[{role:'system',content:SYS}];
+function add(t,c){const d=document.createElement('div');d.className='m '+c;d.textContent=t;$('log').appendChild(d);$('log').scrollTop=1e9;return d}
+function offline(q){q=q.toLowerCase();
+if(/itc|input tax/.test(q))return 'ITC is the GST you paid on purchases that you can set off against GST collected. LedgerMind finds unclaimed ITC and vendors who have not filed. (Add a Groq key for full AI answers.)';
+if(/price|cost|plan/.test(q))return 'Free: 20 invoices/month. Shop Pro ₹299/month. CA Suite ₹1,999/month.';
+if(/gstr|file|return/.test(q))return 'LedgerMind exports GSTR-ready Excel/JSON from your invoices. Filing itself is done on the GST portal or via your CA.';
+return 'I can help with GST, ITC, invoices and pricing. For open-ended questions, add your free Groq API key with the 🔑 button.'}
+$('fab').onclick=()=>$('bot').classList.toggle('open');$('x').onclick=()=>$('bot').classList.remove('open');
+$('key').onclick=()=>{const k=prompt('Paste your free Groq API key (starts with gsk_). Stored only in this browser.',gk());if(k!==null){try{localStorage.setItem('lm_groq',k.trim())}catch(e){}add(k.trim()?'Key saved. Live mode on.':'Key removed. Offline mode.','ai')}};
+$('f').onsubmit=async e=>{e.preventDefault();const q=$('q').value.trim();if(!q)return;$('q').value='';add(q,'u');const w=add('…','ai'),k=gk();
+if(!k){w.textContent=offline(q);return}
+hist.push({role:'user',content:q});
+try{const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+k},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:hist.slice(-12),temperature:.3,max_tokens:400})});
+if(!r.ok)throw new Error(r.status);const j=await r.json(),a=j.choices[0].message.content;hist.push({role:'assistant',content:a});w.textContent=a}
+catch(err){w.textContent='Live AI unavailable here ('+err.message+'). It works on your GitHub Pages site with a valid key. Offline: '+offline(q)}};
+$('mic').onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){add('Voice input not supported in this browser.','ai');return}const s=new SR();s.lang='en-IN';s.onresult=ev=>{$('q').value=ev.results[0][0].transcript;$('f').requestSubmit()};s.start()};
+$('calc').onclick=()=>{const a=parseFloat($('amt').value)||0,r=+$('rate').value/100,inc=$('mode').value==='in',base=inc?a/(1+r):a,g=base*r,f=n=>'₹'+n.toLocaleString('en-IN',{maximumFractionDigits:2});
+$('cres').textContent='Base: '+f(base)+'\nCGST: '+f(g/2)+'\nSGST: '+f(g/2)+'\nTotal: '+f(base+g)};
+$('calc').click();
+const S=[...document.querySelectorAll('#steps li')],O=document.getElementById('out'),R=document.getElementById('run');
+const M=['queued from WhatsApp ✓','text + table regions found ✓','{vendor:"Sri Lakshmi Traders", total:5992, gst:492}','GSTIN valid · HSN 1006, 1512 matched ✓','no duplicate · totals match ✓','ITC ₹492 claimable · GSTR-2B row added ✓'];
+R.onclick=async()=>{R.disabled=true;O.textContent='';S.forEach(s=>s.classList.remove('on'));
+for(let i=0;i<S.length;i++){await new Promise(r=>setTimeout(r,650));S[i].classList.add('on');O.textContent+='> '+M[i]+'\n'}
+O.textContent+='\n✔ Booked in 4.1s';R.disabled=false};
+</script>
+</body>
+</html>
