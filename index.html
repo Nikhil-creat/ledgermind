@@ -62,6 +62,12 @@ input,select{background:var(--bg);color:var(--tx);border:1px solid var(--bd);bor
 .ib{border:1px solid var(--bd);background:transparent;color:var(--tx);border-radius:10px;padding:0 12px;cursor:pointer}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.row>*{flex:1;min-width:110px}
 .res{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--a);white-space:pre-wrap}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:12px}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--bd)}th{color:var(--mu);font-weight:600}
+.tool{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--a);background:transparent;border:1px dashed var(--bd)}
+.sg{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 8px}.sg button{font-size:12px;padding:6px 10px;border-radius:99px;border:1px solid var(--bd);background:transparent;color:var(--mu);cursor:pointer}
+#st{font-size:11px;color:var(--a);margin-left:8px;font-weight:600}
+#pm{position:fixed;inset:0;z-index:30;display:none;place-items:center;background:#000b;padding:16px}#pm.open{display:grid}
+#pm .card{text-align:center;max-width:340px;width:100%}#qr{display:flex;justify-content:center;background:#fff;padding:12px;border-radius:12px;margin:12px auto;width:fit-content;color:#000}
 footer{border-top:1px solid var(--bd);padding:26px 0;color:var(--mu);font-size:13px;text-align:center}
 </style>
 </head>
@@ -120,8 +126,8 @@ Total ₹5,992</div><br><button class="btn" id="run">▶ Run agents</button></di
 <section class="w" id="pricing"><h2>Pricing that pays for itself</h2><p class="sub">Start free, upgrade when time saved beats the price.</p>
 <div class="g">
 <div class="card price"><h3>Starter</h3><div class="p">₹0</div><ul><li>20 invoices / month</li><li>Basic dashboard</li><li>Excel export</li></ul><a class="btn o" href="#top">Get started</a></div>
-<div class="card price hot"><h3>Shop Pro</h3><div class="p">₹299<small>/mo</small></div><ul><li>Unlimited invoices</li><li>WhatsApp agent</li><li>ITC finder + GSTR JSON</li></ul><a class="btn" href="#top">Go Pro</a></div>
-<div class="card price"><h3>CA Suite</h3><div class="p">₹1,999<small>/mo</small></div><ul><li>Multi-client dashboard</li><li>Team roles + audit log</li><li>White-label reports</li></ul><a class="btn o" href="#top">Book demo</a></div>
+<div class="card price hot"><h3>Shop Pro</h3><div class="p">₹299<small>/mo</small></div><ul><li>Unlimited invoices</li><li>WhatsApp agent</li><li>ITC finder + GSTR JSON</li></ul><button class="btn" onclick="pay(299,'Shop Pro')">Pay ₹299 via UPI</button></div>
+<div class="card price"><h3>CA Suite</h3><div class="p">₹1,999<small>/mo</small></div><ul><li>Multi-client dashboard</li><li>Team roles + audit log</li><li>White-label reports</li></ul><button class="btn o" onclick="pay(1999,'CA Suite')">Pay ₹1,999 via UPI</button></div>
 </div></section>
 
 <section class="w"><h2>Advanced modules</h2><p class="sub">Next-gen capabilities on the roadmap and in the prototype.</p>
@@ -143,6 +149,13 @@ Total ₹5,992</div><br><button class="btn" id="run">▶ Run agents</button></di
 <g fill="url(#lg)"><rect x="15" y="80" width="30" height="50" rx="5"/><rect x="65" y="65" width="30" height="65" rx="5"/><rect x="115" y="72" width="30" height="58" rx="5"/><rect x="165" y="45" width="30" height="85" rx="5"/><rect x="215" y="55" width="30" height="75" rx="5"/><rect x="262" y="30" width="30" height="100" rx="5" opacity=".6"/></g>
 <g fill="var(--mu)" font-size="10" text-anchor="middle"><text x="30" y="140">Oct</text><text x="80" y="140">Nov</text><text x="130" y="140">Dec</text><text x="180" y="140">Jan</text><text x="230" y="140">Feb</text><text x="277" y="140">Mar</text></g></svg></div></div></section>
 
+<section class="w" id="ledger"><h2>Smart ledger</h2><p class="sub">Add bills manually, scan a photo, or just tell the AI agent. Saved in your browser.</p>
+<div class="stats"><div class="stat"><b id="sT">₹0</b><small>total billed</small></div><div class="stat"><b id="sG">₹0</b><small>GST / ITC</small></div><div class="stat"><b id="sN">0</b><small>invoices</small></div></div>
+<div class="card"><div class="row"><input id="iv" placeholder="Vendor name"><input id="ia" type="number" inputmode="decimal" placeholder="Amount ₹"><select id="ir"><option>0</option><option>5</option><option>12</option><option selected>18</option><option>28</option></select><select id="im"><option value="ex">Excl. GST</option><option value="in">Incl. GST</option></select></div>
+<div class="row"><button class="btn" id="ad">+ Add invoice</button><button class="btn o" id="sc">📷 Scan bill</button><button class="btn o" id="ex">⬇ Export CSV</button><button class="btn o" id="cl">Clear</button></div>
+<input type="file" id="sf" accept="image/*" hidden><div class="res" id="sm"></div>
+<div style="overflow-x:auto"><table><thead><tr><th>Vendor</th><th>Total</th><th>Rate</th><th>GST</th><th></th></tr></thead><tbody id="lb"></tbody></table></div></div></section>
+
 <section class="w"><h2>Tech stack</h2><br>
 <div class="chips"><span>Next.js</span><span>React</span><span>TypeScript</span><span>FastAPI</span><span>Python</span><span>LangGraph</span><span>RAG</span><span>pgvector</span><span>Supabase</span><span>Docker</span><span>Razorpay</span><span>WhatsApp API</span><span>CNN / OCR</span><span>GitHub Actions</span></div></section>
 
@@ -154,33 +167,102 @@ Total ₹5,992</div><br><button class="btn" id="run">▶ Run agents</button></di
 
 <footer>© 2026 LedgerMind · Designed &amp; built by Nikhil Chary Sriramoju</footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<div id="pm"><div class="card"><h3 id="pt" style="margin-top:0"></h3><p class="sub" style="margin:0">Scan with any UPI app</p><div id="qr"></div>
+<div class="res" id="pid"></div><p class="sub" id="pw" style="font-size:12px"></p>
+<a class="btn" id="pl" href="#">Open UPI app</a> <button class="btn o" id="cp">Copy UPI ID</button> <button class="btn o" id="pc">Close</button></div></div>
 <button id="fab" aria-label="Open AI assistant">🤖</button>
-<div id="bot"><header><span>LedgerMind AI · Groq</span><span><button class="ib" id="key" title="Set Groq API key" style="padding:4px 10px">🔑</button> <button class="ib" id="x" style="padding:4px 10px">✕</button></span></header>
+<div id="bot"><header><span>LedgerMind Agent<span id="st"></span></span><span><button class="ib" id="key" title="Set Groq API key" style="padding:4px 10px">🔑</button> <button class="ib" id="x" style="padding:4px 10px">✕</button></span></header>
 <div id="log"><div class="m ai">Hi! I'm the LedgerMind assistant. Ask about GST, ITC, invoices or pricing. Tap 🔑 to add your free Groq key for live AI answers.</div></div>
-<form id="f"><input id="q" placeholder="Ask anything…" autocomplete="off"><button type="button" class="ib" id="mic">🎙️</button><button class="btn">Send</button></form></div>
+<div class="sg" id="sg"><button>GST on milk powder 1kg</button><button>Explain ITC simply</button><button>Add invoice 5000 Ravi Traders 18%</button><button>Show my ledger summary</button><button>Pay for Shop Pro</button></div><form id="f"><input id="q" placeholder="Ask anything…" autocomplete="off"><button type="button" class="ib" id="mic">🎙️</button><button class="btn">Send</button></form></div>
 <script>
 const $=id=>document.getElementById(id);
-const gk=()=>{try{return localStorage.getItem('lm_groq')||''}catch(e){return ''}};
-const SYS='You are LedgerMind AI, a concise assistant for Indian small businesses and CAs. Explain GST, input tax credit, GSTR-1/3B, e-invoicing and bookkeeping simply. Give short answers. Say you are not a tax professional for filing decisions.';
+const CFG={upi:'anuasriramoju-5@okhdfcbank',name:'Anantha Chary Sriramoju'};
+const ls={g:k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const inr=n=>'₹'+(+n).toLocaleString('en-IN',{maximumFractionDigits:2});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let L=[];try{L=JSON.parse(ls.g('lm_ledger')||'[]')}catch(e){}
+function renderL(){const t=L.reduce((a,x)=>a+x.total,0),g=L.reduce((a,x)=>a+x.gst,0);$('sT').textContent=inr(t);$('sG').textContent=inr(g);$('sN').textContent=L.length;
+$('lb').innerHTML=L.slice().reverse().map(x=>`<tr><td>${esc(x.vendor)}</td><td>${inr(x.total)}</td><td>${x.rate}%</td><td>${inr(x.gst)}</td><td><button class="ib" onclick="delI(${x.id})">✕</button></td></tr>`).join('')||'<tr><td colspan="5">No invoices yet.</td></tr>'}
+function saveL(){ls.s('lm_ledger',JSON.stringify(L));renderL()}
+window.delI=id=>{L=L.filter(x=>x.id!==id);saveL()};
+function addInv(v,amt,rate,inc){amt=+amt||0;rate=+rate||0;const b=inc?amt/(1+rate/100):amt,g=b*rate/100,r={id:Date.now()+Math.random(),vendor:String(v||'Unknown').slice(0,50),base:+b.toFixed(2),gst:+g.toFixed(2),total:+(b+g).toFixed(2),rate,date:new Date().toISOString().slice(0,10)};L.push(r);saveL();return r}
+$('ad').onclick=()=>{if(!(+$('ia').value))return;addInv($('iv').value||'Unknown',$('ia').value,$('ir').value,$('im').value==='in');$('iv').value='';$('ia').value=''};
+$('cl').onclick=()=>{if(confirm('Clear all invoices?')){L=[];saveL()}};
+$('ex').onclick=()=>{const c='Date,Vendor,Base,GST,Total,Rate\n'+L.map(x=>[x.date,'"'+x.vendor.replace(/"/g,'""')+'"',x.base,x.gst,x.total,x.rate].join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/csv'}));a.download='ledgermind.csv';a.click()};
+function loadT(){return new Promise((res,rej)=>{if(window.Tesseract)return res();const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+$('sc').onclick=()=>$('sf').click();
+$('sf').onchange=async e=>{const f=e.target.files[0];if(!f)return;$('sm').textContent='Reading bill with OCR…';
+try{await loadT();const {data:{text}}=await Tesseract.recognize(f,'eng');const g=(text.match(/\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]/)||[''])[0];
+const n=[...text.matchAll(/(?:total|grand|amount)[^\d\n]{0,15}([\d,]+\.?\d*)/gi)].map(x=>+x[1].replace(/,/g,'')).filter(Boolean);
+$('iv').value=(text.split('\n').find(l=>l.trim().length>3)||'Scanned bill').trim().slice(0,40);$('ia').value=n.length?Math.max(...n):'';$('im').value='in';
+$('sm').textContent='Extracted'+(g?' · GSTIN '+g:'')+'. Check the fields, then tap Add invoice.'}catch(err){$('sm').textContent='Scan needs internet and the live site (GitHub Pages).'}};
+
+/* ---------- UPI ---------- */
+function upiUrl(a,n){return `upi://pay?pa=${encodeURIComponent(CFG.upi)}&pn=${encodeURIComponent(CFG.name)}&am=${a}&cu=INR&tn=${encodeURIComponent(n||'LedgerMind')}`}
+window.pay=(a,n)=>{const u=upiUrl(a,'LedgerMind '+n);$('pt').textContent=n+' · '+inr(a)+'/month';$('pid').textContent='UPI: '+CFG.upi;$('pl').href=u;$('qr').innerHTML='';
+$('pw').textContent=/YOUR-UPI/.test(CFG.upi)?'Owner: set your real UPI ID in CFG inside index.html.':'After paying, share the screenshot to activate your plan.';
+if(window.QRCode)new QRCode($('qr'),{text:u,width:190,height:190});else $('qr').innerHTML='<img src="upi-qr.png" width="190" alt="UPI QR">';$('pm').classList.add('open')};
+$('pc').onclick=()=>$('pm').classList.remove('open');
+$('cp').onclick=()=>{try{navigator.clipboard.writeText(CFG.upi);$('cp').textContent='Copied ✓'}catch(e){}};
+
+/* ---------- Agent tools ---------- */
+const TOOLS=[
+{type:'function',function:{name:'calc_gst',description:'Compute GST split (base, CGST, SGST, total)',parameters:{type:'object',properties:{amount:{type:'number'},rate:{type:'number'},inclusive:{type:'boolean'}},required:['amount','rate']}}},
+{type:'function',function:{name:'add_invoice',description:'Add an invoice to the user ledger',parameters:{type:'object',properties:{vendor:{type:'string'},amount:{type:'number'},rate:{type:'number'},inclusive:{type:'boolean'}},required:['vendor','amount','rate']}}},
+{type:'function',function:{name:'ledger_summary',description:'Get ledger totals, GST/ITC and recent invoices',parameters:{type:'object',properties:{}}}},
+{type:'function',function:{name:'upi_link',description:'Create a UPI payment link for the plan or an amount',parameters:{type:'object',properties:{amount:{type:'number'},note:{type:'string'}},required:['amount']}}}];
+function run(n,a){a=a||{};
+if(n==='calc_gst'){const r=(+a.rate||0)/100,b=a.inclusive?a.amount/(1+r):a.amount,g=b*r;return{base:+b.toFixed(2),cgst:+(g/2).toFixed(2),sgst:+(g/2).toFixed(2),total:+(b+g).toFixed(2)}}
+if(n==='add_invoice'){const r=addInv(a.vendor,a.amount,a.rate,a.inclusive);return{ok:true,vendor:r.vendor,total:r.total,gst:r.gst}}
+if(n==='ledger_summary')return{count:L.length,total_billed:+L.reduce((s,x)=>s+x.total,0).toFixed(2),gst_itc:+L.reduce((s,x)=>s+x.gst,0).toFixed(2),recent:L.slice(-5).map(x=>x.vendor+' '+x.total)};
+if(n==='upi_link'){window.pay(a.amount,a.note||'Payment');return{ok:true,opened:'UPI payment sheet shown to user'}}
+return{error:'unknown tool'}}
+
+/* ---------- Groq chat ---------- */
+const SYS='You are LedgerMind AI, an agent for Indian small businesses and CAs. Use the tools to calculate GST, add invoices, read the ledger and create UPI payment links instead of guessing. Explain GST, ITC, GSTR-1/3B and bookkeeping simply and briefly. Reply in the language the user writes (English, Telugu, Hindi or Tanglish). GST rates change, so mention to verify on the GST portal for filing decisions.';
 let hist=[{role:'system',content:SYS}];
+const API='https://api.groq.com/openai/v1/';
 function add(t,c){const d=document.createElement('div');d.className='m '+c;d.textContent=t;$('log').appendChild(d);$('log').scrollTop=1e9;return d}
-function offline(q){q=q.toLowerCase();
-if(/itc|input tax/.test(q))return 'ITC is the GST you paid on purchases that you can set off against GST collected. LedgerMind finds unclaimed ITC and vendors who have not filed. (Add a Groq key for full AI answers.)';
-if(/price|cost|plan/.test(q))return 'Free: 20 invoices/month. Shop Pro ₹299/month. CA Suite ₹1,999/month.';
-if(/gstr|file|return/.test(q))return 'LedgerMind exports GSTR-ready Excel/JSON from your invoices. Filing itself is done on the GST portal or via your CA.';
-return 'I can help with GST, ITC, invoices and pricing. For open-ended questions, add your free Groq API key with the 🔑 button.'}
+function trim(){while(hist.length>24){hist.splice(1,1)}while(hist[1]&&hist[1].role!=='user')hist.splice(1,1)}
+async function pick(k){const r=await fetch(API+'models',{headers:{Authorization:'Bearer '+k}});if(!r.ok)return '';const ids=(await r.json()).data.map(x=>x.id);
+const pref=['llama-3.3-70b-versatile','openai/gpt-oss-120b','openai/gpt-oss-20b','llama-3.1-8b-instant'];
+return pref.find(p=>ids.includes(p))||ids.find(i=>!/whisper|guard|tts|playai|orpheus|prompt/i.test(i))||''}
+async function groq(tools){const k=ls.g('lm_groq');let model=ls.g('lm_model')||'llama-3.3-70b-versatile';
+const call=m=>fetch(API+'chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+k},body:JSON.stringify(Object.assign({model:m,messages:hist,temperature:.3,max_tokens:500},tools?{tools:TOOLS,tool_choice:'auto'}:{}))});
+let r=await call(model);
+if(r.status===404||r.status===400){const id=await pick(k);if(id&&id!==model){ls.s('lm_model',id);r=await call(id)}}
+if(!r.ok){const t=await r.text();throw new Error(r.status+' '+t.slice(0,140))}
+return (await r.json()).choices[0].message}
+async function agent(q){hist.push({role:'user',content:q});trim();let tools=true;
+for(let i=0;i<5;i++){let m;try{m=await groq(tools)}catch(e){if(tools&&/^(400|422)/.test(e.message)){tools=false;continue}throw e}
+const tc=m.tool_calls||[];hist.push(tc.length?{role:'assistant',content:m.content||'',tool_calls:tc}:{role:'assistant',content:m.content||''});
+if(!tc.length)return m.content||'Done.';
+for(const c of tc){let a={};try{a=JSON.parse(c.function.arguments||'{}')}catch(e){}
+add('⚙ '+c.function.name+' '+JSON.stringify(a),'ai tool');hist.push({role:'tool',tool_call_id:c.id,content:JSON.stringify(run(c.function.name,a))})}}
+return 'Done.'}
+const KB=[['milk powder','5% GST when pre-packed and labelled'],['fresh milk','Nil'],['uht milk','Nil'],['edible oil','5%'],['sugar','5%'],['tea','5%'],['coffee','5%'],['atta','Nil if loose, 5% if pre-packed and branded'],['rice','Nil if loose, 5% if pre-packed and branded'],['mobile','18%'],['laptop','18%'],['software','18%']];
+function offline(q){const l=q.toLowerCase();let m;
+if(m=l.match(/add invoice\D*([\d,.]+)\s+([a-z][a-z .&'-]*?)\s+(\d+)\s*%/)){const r=addInv(m[2],m[1].replace(/,/g,''),m[3],false);return 'Added '+r.vendor+': total '+inr(r.total)+', GST '+inr(r.gst)+'.'}
+if(/ledger|summary|dashboard/.test(l)){const s=run('ledger_summary');return s.count+' invoices, billed '+inr(s.total_billed)+', GST/ITC '+inr(s.gst_itc)+'.'}
+if(m=l.match(/gst\D{0,12}([\d,]+\.?\d*)\D+(\d+)\s*%/)){const r=run('calc_gst',{amount:+m[1].replace(/,/g,''),rate:+m[2]});return 'Base '+inr(r.base)+', CGST '+inr(r.cgst)+', SGST '+inr(r.sgst)+', total '+inr(r.total)+'.'}
+const k=KB.find(x=>l.includes(x[0]));if(k)return k[0]+': '+k[1]+'. Rates change, so verify on the GST portal. Add a Groq key (🔑) for full AI answers.';
+if(/pay|upi|buy|subscribe/.test(l)){window.pay(299,'Shop Pro');return 'Opened the UPI payment sheet for Shop Pro ₹299.'}
+if(/itc|input tax/.test(l))return 'ITC is the GST you paid on business purchases, which you can set off against GST you collect. LedgerMind finds unclaimed ITC and flags vendors who have not filed.';
+if(/price|plan|cost/.test(l))return 'Free: 20 invoices/month. Shop Pro ₹299/month. CA Suite ₹1,999/month. Say "pay" to open UPI.';
+return 'Offline mode: I can do "add invoice 5000 Ravi 18%", "gst 5000 at 18%", "ledger summary", item GST rates and "pay". Tap 🔑 and add a free Groq key for full AI.'}
+function status(){$('st').textContent=ls.g('lm_groq')?'● Live':'● Offline'}
 $('fab').onclick=()=>$('bot').classList.toggle('open');$('x').onclick=()=>$('bot').classList.remove('open');
-$('key').onclick=()=>{const k=prompt('Paste your free Groq API key (starts with gsk_). Stored only in this browser.',gk());if(k!==null){try{localStorage.setItem('lm_groq',k.trim())}catch(e){}add(k.trim()?'Key saved. Live mode on.':'Key removed. Offline mode.','ai')}};
-$('f').onsubmit=async e=>{e.preventDefault();const q=$('q').value.trim();if(!q)return;$('q').value='';add(q,'u');const w=add('…','ai'),k=gk();
-if(!k){w.textContent=offline(q);return}
-hist.push({role:'user',content:q});
-try{const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+k},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:hist.slice(-12),temperature:.3,max_tokens:400})});
-if(!r.ok)throw new Error(r.status);const j=await r.json(),a=j.choices[0].message.content;hist.push({role:'assistant',content:a});w.textContent=a}
-catch(err){w.textContent='Live AI unavailable here ('+err.message+'). It works on your GitHub Pages site with a valid key. Offline: '+offline(q)}};
-$('mic').onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){add('Voice input not supported in this browser.','ai');return}const s=new SR();s.lang='en-IN';s.onresult=ev=>{$('q').value=ev.results[0][0].transcript;$('f').requestSubmit()};s.start()};
-$('calc').onclick=()=>{const a=parseFloat($('amt').value)||0,r=+$('rate').value/100,inc=$('mode').value==='in',base=inc?a/(1+r):a,g=base*r,f=n=>'₹'+n.toLocaleString('en-IN',{maximumFractionDigits:2});
-$('cres').textContent='Base: '+f(base)+'\nCGST: '+f(g/2)+'\nSGST: '+f(g/2)+'\nTotal: '+f(base+g)};
-$('calc').click();
+$('key').onclick=()=>{const k=prompt('Paste your free Groq API key (gsk_…). Stored only in this browser.',ls.g('lm_groq'));if(k!==null){ls.s('lm_groq',k.trim());ls.s('lm_model','');status();add(k.trim()?'Key saved. Live agent mode on.':'Key removed. Offline mode.','ai')}};
+async function send(q){if(!q)return;add(q,'u');const w=add('…','ai');
+if(!ls.g('lm_groq')){w.textContent=offline(q);return}
+try{w.textContent=await agent(q)}catch(err){const s=err.message.slice(0,3);
+w.textContent=(s==='401'?'Your Groq key was rejected. Tap 🔑 and paste a fresh key.':s==='429'?'Groq rate limit reached. Wait a minute and retry.':'Live AI error: '+err.message)+'\n\nOffline reply: '+offline(q)}}
+$('f').onsubmit=e=>{e.preventDefault();const q=$('q').value.trim();$('q').value='';send(q)};
+$('sg').onclick=e=>{if(e.target.tagName==='BUTTON')send(e.target.textContent)};
+$('mic').onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){add('Voice input not supported in this browser.','ai');return}const s=new SR();s.lang='en-IN';s.onresult=ev=>send(ev.results[0][0].transcript);s.start()};
+$('calc').onclick=()=>{const a=parseFloat($('amt').value)||0,r=+$('rate').value/100,inc=$('mode').value==='in',b=inc?a/(1+r):a,g=b*r;$('cres').textContent='Base: '+inr(b)+'\nCGST: '+inr(g/2)+'\nSGST: '+inr(g/2)+'\nTotal: '+inr(b+g)};
+$('calc').click();renderL();status();
 const S=[...document.querySelectorAll('#steps li')],O=document.getElementById('out'),R=document.getElementById('run');
 const M=['queued from WhatsApp ✓','text + table regions found ✓','{vendor:"Sri Lakshmi Traders", total:5992, gst:492}','GSTIN valid · HSN 1006, 1512 matched ✓','no duplicate · totals match ✓','ITC ₹492 claimable · GSTR-2B row added ✓'];
 R.onclick=async()=>{R.disabled=true;O.textContent='';S.forEach(s=>s.classList.remove('on'));
